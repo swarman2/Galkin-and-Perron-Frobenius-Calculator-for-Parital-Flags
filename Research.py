@@ -170,7 +170,7 @@ def largest_real_eig(alpha,a,n):
     new code
     """
     mat = add_mat(mat,temp)
-  Print(mat)
+  #Print(mat)
   print("    { INFO } matrix generation: ",round(time()-t1,3)," secs")
   print("        ( INFO ) Thm 1 calculations: ",round(t_thm1,3)," secs")
   t2=time()
@@ -182,9 +182,9 @@ def largest_real_eig(alpha,a,n):
   return maxReal
 def main():
   alpha=[1,1]
-  a = [1,2]
+  a = [1,5]
   points=[[],[]]
-  max_n = 6
+  max_n = 15
   for i in range(4,max_n+1):
     t=time()
     print("[ INFO ] solving n = ",i)
@@ -195,7 +195,7 @@ def main():
   plt.plot(points[0],points[1],'ro')
   temp_x=[]
   temp_y=[]
-  scale_factor = int(max_n/5)
+  scale_factor = max(int(max_n/5),1)
   for i in range(int(len(points[0])/scale_factor)):
     temp_x.append(points[0][scale_factor*i])
     temp_y.append(points[1][scale_factor*i])

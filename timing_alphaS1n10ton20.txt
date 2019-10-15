@@ -1,0 +1,71 @@
+
+  
+  
+Python - Research.py:149
+[ INFO ] solving n =  10
+    { INFO } permutations:  0.011  secs
+    { INFO } matrix generation:  0.655  secs
+        ( INFO ) Thm 1 calculations:  0.007  secs
+    { INFO } eigenvalue calculation:  0.004  secs
+n =  10 :   0.671  secs
+[ INFO ] solving n =  11
+    { INFO } permutations:  0.017  secs
+    { INFO } matrix generation:  1.034  secs
+        ( INFO ) Thm 1 calculations:  0.017  secs
+    { INFO } eigenvalue calculation:  0.01  secs
+n =  11 :   1.062  secs
+[ INFO ] solving n =  12
+    { INFO } permutations:  0.023  secs
+    { INFO } matrix generation:  1.678  secs
+        ( INFO ) Thm 1 calculations:  0.026  secs
+    { INFO } eigenvalue calculation:  0.016  secs
+n =  12 :   1.718  secs
+[ INFO ] solving n =  13
+    { INFO } permutations:  0.031  secs
+    { INFO } matrix generation:  3.121  secs
+        ( INFO ) Thm 1 calculations:  0.044  secs
+    { INFO } eigenvalue calculation:  0.029  secs
+n =  13 :   3.182  secs
+[ INFO ] solving n =  14
+    { INFO } permutations:  0.044  secs
+    { INFO } matrix generation:  3.74  secs
+        ( INFO ) Thm 1 calculations:  0.064  secs
+    { INFO } eigenvalue calculation:  0.047  secs
+n =  14 :   3.832  secs
+[ INFO ] solving n =  15
+    { INFO } permutations:  0.053  secs
+    { INFO } matrix generation:  7.459  secs
+        ( INFO ) Thm 1 calculations:  0.072  secs
+    { INFO } eigenvalue calculation:  0.058  secs
+n =  15 :   7.572  secs
+[ INFO ] solving n =  16
+    { INFO } permutations:  0.068  secs
+    { INFO } matrix generation:  7.199  secs
+        ( INFO ) Thm 1 calculations:  0.069  secs
+    { INFO } eigenvalue calculation:  0.071  secs
+n =  16 :   7.341  secs
+[ INFO ] solving n =  17
+    { INFO } permutations:  0.084  secs
+    { INFO } matrix generation:  12.659  secs
+        ( INFO ) Thm 1 calculations:  0.092  secs
+    { INFO } eigenvalue calculation:  0.09  secs
+n =  17 :   12.836  secs
+[ INFO ] solving n =  18
+    { INFO } permutations:  0.102  secs
+    { INFO } matrix generation:  15.237  secs
+        ( INFO ) Thm 1 calculations:  0.142  secs
+    { INFO } eigenvalue calculation:  0.104  secs
+n =  18 :   15.446  secs
+[ INFO ] solving n =  19
+    { INFO } permutations:  0.125  secs
+    { INFO } matrix generation:  17.825  secs
+        ( INFO ) Thm 1 calculations:  0.136  secs
+    { INFO } eigenvalue calculation:  0.136  secs
+n =  19 :   18.09  secs
+[ INFO ] solving n =  20
+    { INFO } permutations:  0.154  secs
+    { INFO } matrix generation:  23.788  secs
+        ( INFO ) Thm 1 calculations:  0.184  secs
+    { INFO } eigenvalue calculation:  0.178  secs
+n =  20 :   24.125  secs
+Severity 	Provider 	Description	Line 

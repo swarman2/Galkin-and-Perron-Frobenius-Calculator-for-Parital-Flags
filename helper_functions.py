@@ -22,7 +22,7 @@ def S(maxNum,split_temp = []):
   #t = time.time()
   if len(split) == 0:
     print("error invalid vector a")
-  print(split_temp[-1]+2)
+  #print(split_temp[-1]+2)
   l = list(permutations(range(1,split_temp[-1]+2)))
   l=[list(i)for i in l]
   #print("l = ",l)
@@ -59,7 +59,7 @@ def S(maxNum,split_temp = []):
       for j in range(len(l)):
         l[j].insert(split[i]-1,k+1)
         copyl=copy.deepcopy(l[j])
-        new_perm = fix_perm(a,copyl)
+        new_perm = fix_perm(split[0:-1],copyl)
         if not new_perm in new_l:
           new_l.append(new_perm)#-1 bc split is indexed from 1
         l[j].remove(k+1)
@@ -73,7 +73,7 @@ def S(maxNum,split_temp = []):
   #print(len(l))
   #print("new_l = ",  new_l)
   print("    { INFO } permutations: ",round(time()-t,3)," secs")
-  print(new_l)
+  #print(new_l)
   return new_l
    # print(l)
 def l(w):
@@ -276,11 +276,25 @@ def w_a(a,n,j):
   return temp_a[i]+temp_a[i+1]+1-j
 
 
-def fix_perm(a,perm):
-  perm[:a[0]-1]=insertionSort(perm[:a[0]-1])
+def fix_perm(a,perm_og):
+  #print()
+  #print("a = ",a," perm = ",perm_og)
+
+  perm=copy.deepcopy(perm_og)
+  #print()
+  #print("  perm[:a[0]] = ",  perm[:a[0]])
+  perm[:a[0]]=insertionSort(perm[:a[0]])
+  #print("  perm[:a[0]] = ",  perm[:a[0]])
   for r in range(0,len(a)-1):
-    perm[a[r]:a[r+1]-1]=insertionSort(perm[a[r]:a[r+1]-1])
+    #print()
+    #print(  "perm[",a,"[",r,"]:a[",r+1,"]] = ",perm[a[r]:a[r+1]])
+    perm[a[r]:a[r+1]]=insertionSort(perm[a[r]:a[r+1]])
+    #print(  "perm[",a,"[",r,"]:a[",r+1,"]] = ",perm[a[r]:a[r+1]])
+  #print()
+  #print("perm[a[-1]:] = ",perm[a[-1]:])
   perm[a[-1]:]=insertionSort(perm[a[-1]:])
+  #print("perm[a[-1]:] = ",perm[a[-1]:])
+  #print("sorted perm = ",perm)
   return perm
 def insertionSort(arr):
   #print(arr)
@@ -347,6 +361,6 @@ def array_equals(arr1,arr2):
         return 0
   return 1
 #get_d(3,[2,4,6,7])
-#print(fix_perm([1,2],[1,2,4,3]))
+print(fix_perm([1,2],[1,6,3,2,4,5]))
 #print("d = [1,0]")
 #print(swap_perm([1,3],[1,0],[3,1,2,0]))
