@@ -2,7 +2,8 @@ from helper_functions import *
 import numpy as np
 import matplotlib.pyplot as plt
 from time import time
-
+import multiprocessing #for threading
+import threading #also for threading
 """alph is an ordered pair [l,s] where s is the highest number in alpha, and l is the length of alpha"""
 def Thm1(alph,len_u,len_w,sum):
   """
@@ -180,36 +181,69 @@ def largest_real_eig(alpha,a,n):
   print("    { INFO } eigenvalue calculation: ",round(time()-t2,3)," secs")
   maxReal = max(real_eigvals)
   return maxReal
+
+
 def main():
-  alpha=[1,1]
-  a = [1,5]
-  points=[[],[]]
-  max_n = 15
-  for i in range(4,max_n+1):
-    t=time()
-    print("[ INFO ] solving n = ",i)
-    points[0].append(i)
-    points[1].append(round(largest_real_eig(alpha,a,i),5))
-    print("n = ",i,":  ",round(time()-t,3)," secs")
-  plt.plot(points[0],points[1])
-  plt.plot(points[0],points[1],'ro')
-  temp_x=[]
-  temp_y=[]
-  scale_factor = max(int(max_n/5),1)
-  for i in range(int(len(points[0])/scale_factor)):
-    temp_x.append(points[0][scale_factor*i])
-    temp_y.append(points[1][scale_factor*i])
-  if max_n%2==0:
-    temp_x.append(points[0][-1])
-    temp_y.append(points[1][-1])
-  for i_x, i_y in zip(temp_x, temp_y):
-    plt.text(i_x, i_y-(2.1-min(points[1]))*.025, '({}, {})'.format(i_x, i_y))
+
+  max_n = 20
+  max_a = 6
+  if max_a >= multiprocessing.cpu_count():
+    print(" WOULD USE TOO MANY THREADS")
+  min_n=4
+  Threads=[]
+  x = []
+  y=[]
+  for a2 in range(2,max_a+1):
+    x.append([])
+    y.append([])
+    print("x[-1]: ",x[-1],"  y:  ",y)
+    print(Threads)
+    Threads.append(threading.Thread(target = main_helper,args=(max_n,min_n,a2,x[-1],y[-1])))
+    print(Threads)
+    Threads[-1].start()
+  for i in range(len(Threads)):
+    Threads[i].join()
+  #for i in range(len(points[0])):
+    #print(points[0][i],", ",points[1][i])
+  print(x)
+  print(y)
+  for i in range(len(x)):
+    _x = x[i]
+    _y = y[i]
+    lab = 'a = [1, '+str(i+min_n)+']'
+    plt.plot( _x, _y,label=lab)
+    plt.plot( _x, _y,'ro')
+    temp_x=[]
+    temp_y=[]
+    scale_factor = max(int(max_n/5),1)
+    for i in range(int(len(_x)/scale_factor)):
+      temp_x.append(_x[scale_factor*i])
+      temp_y.append(_y[scale_factor*i])
+    if max_n%2==0:
+      temp_x.append(_x[-1])
+      temp_y.append(_y[-1])
+    for i_x, i_y in zip(temp_x, temp_y):
+      plt.text(i_x, i_y-(1.1)*.03, '({}, {})'.format(i_x, i_y))
   plt.ylabel('max(real_eigvals)')
   plt.xlabel('n')
-  plt.axis([3,max_n+1,min(points[1])-(2.1-min(points[1]))*.1,2.1])
-  for i in range(len(points[0])):
-    print(points[0][i],", ",points[1][i])
+  plt.legend(loc='upper left',frameon=False)
+  plt.axis([3,max_n+1,1,2.1])
   plt.show()
+
+def main_helper(max_n,min_n,a2,xarr,yarr):
+
+  a = [1,a2]
+  alpha=[1,1]
+  #points=[[],[]]
+  for i in range(min_n,max_n+1):
+    t=time()
+    print("[ INFO ] solving n = ",i," a = [1, ",a2,"]")
+    xarr.append(i)
+    yarr.append(round(largest_real_eig(alpha,a,i),5))
+    print("n = ",i,":  ",round(time()-t,3)," secs")
+  #xarr[0]=points[0]
+  #yarr[0]=points[1]
+
 
 
   #print(mat[7][4])
