@@ -54,6 +54,10 @@ def S(maxNum,split_temp = []):
   for k in range(split[-2]+1,maxNum):
     #print("test")
     #print("l = ",l)
+    reverse_ident = []
+    for i in range(k,0,-1):
+      reverse_ident.append(i)
+    l.append(reverse_ident)
     new_l=[]
     for i in range(len(split)):
       for j in range(len(l)):
@@ -72,8 +76,8 @@ def S(maxNum,split_temp = []):
 
   #print(len(l))
   #print("new_l = ",  new_l)
-  print("    { INFO } permutations: ",round(time()-t,3)," secs")
-  #print(new_l)
+  #print("    { INFO } permutations: ",round(time()-t,3)," secs")
+  #print("new_l = ",new_l)
   return new_l
    # print(l)
 def l(w):
@@ -261,7 +265,7 @@ def T(d,a,i,p,n):
 def gamma(d,a,n,p):
   for i in range(len(a),0,-1):
     p = T(d,a,i,p,n)
-  print()
+  #print()
   return p
 
 def w_a(a,n,j):
@@ -361,6 +365,6 @@ def array_equals(arr1,arr2):
         return 0
   return 1
 #get_d(3,[2,4,6,7])
-print(fix_perm([1,2],[1,6,3,2,4,5]))
+#print(fix_perm([1,2],[1,6,3,2,4,5]))
 #print("d = [1,0]")
 #print(swap_perm([1,3],[1,0],[3,1,2,0]))
