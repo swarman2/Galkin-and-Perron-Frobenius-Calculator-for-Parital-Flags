@@ -52,10 +52,8 @@ def S(maxNum,split_temp = []):
       if valid_perm(perm, split_temp):
         permutations.append(perm)
       perm = list(f.read(13))
-    print(permutations)
-    return
+    return permutations
   if maxNum >13:
-
     perm=list(f.read(13))
     while perm:
       new_perm = []
@@ -67,81 +65,13 @@ def S(maxNum,split_temp = []):
           if valid_perm(perm, split_temp):
             permutations.append(perm)
       perm = list(f.read(13))
-    return
+    return permutations
 
-  for i in range(len(perm)):
-    perm[i]=int(perm[i])
-  print(perm)
-  t=time()
-  split = copy.deepcopy(split_temp)
-  split.append(maxNum)
-  #t = time.time()
-  if len(split) == 0:
-    print("error invalid vector a")
-  #print(split_temp[-1]+2)
-  l = list(permutations(range(1,split_temp[-1]+2)))
-  l=[list(i)for i in l]
-  #print("l = ",l)
-  #print(len(l))
- # print(l)
-  k=0
-  for k in range(len(l)-1,-1,-1):
- # while k < len(l):
-    array = []
-    prev = 0
-    for i in range(len(split)-1):
-      array.append(l[k][prev:split[i]])
-      prev = split[i]
-    array.append(l[k][prev:])
-    """array [i] is now the i'th split"""
-    i=0
-    while i < len(array):
-      j=0
-      while j < len(array[i])-1:
-        if array[i][j]>array[i][j+1]:
-          l.pop(k)
-          j=len(array[i])
-        j=j+1
-      if j == len(array[i])+1:
-        i=len(array)
-      i=i+1
-  #print("l = ",l)
-  new_l= copy.deepcopy(l)
-  for k in range(split[-2]+1,maxNum):
-    #print("test")
-    #print("l = ",l)
-    #reverse_ident = []
-    #for i in range(k,0,-1):
-    #  reverse_ident.append(i)
-    #l.append(reverse_ident)
-    #new_l=[]
-    #for i in range(len(split)):
-    for i in range(len(l)):
-      for j in range(len(l)):
-        #l[j].insert(split[i]-1,k+1)
-        l[j].insert(i,k+1)
-        copyl=copy.deepcopy(l[j])
-        new_perm = fix_perm(split[0:-1],copyl)
-        if not new_perm in new_l:
-          new_l.append(new_perm)#-1 bc split is indexed from 1
-        l[j].remove(k+1)
-    #print()
-    #print(new_l)
-    #print()
-    l=copy.deepcopy(new_l)
-  #print(time.time()-t)
-  #print()
-
-  #print(len(l))
-  #print("new_l = ",  new_l)
-  #print("    { INFO } permutations: ",round(time()-t,3)," secs")
-  #print("new_l = ",new_l)
-  return new_l
-   # print(l)
 def l(w):
-  #print(len_dict.keys())
+  #store values in dictionary for one time calculation
   if tuple(w) in len_dict.keys():
     return len_dict[tuple(w)]
+  #make sure permutations is [1,n] not [0,n-1]
   copyw = copy.deepcopy(w)
   if min(w) == 0:
     for i in range(len(copyw)):
@@ -156,16 +86,8 @@ def l(w):
   len_dict[tuple(w)]=length
   return length
 
-
-
 """returns true or false"""
 def Piere(d,j):
-  """
-  max_index = 0
-  for i in range(1,len(d)):
-    if d[i]>d[max_index]:
-      max_index=i
-          """
   max_index=j
   for i in range(max_index-1):
     if not i == len(d)-1:
@@ -176,17 +98,13 @@ def Piere(d,j):
       return 0
   return 1
 
-def MergeSort_perm(array):
-  for i in range(len(array)):
-    len_dict[tuple(array[i])]=l(array[i])
-  return MergeSort_perm_helper(array)
 '''Takes in an array of permutations'''
-def MergeSort_perm_helper(array):
+def MergeSort_perm(array):
   if len(array)<=1:
     return array
   m = math.floor(len(array)/2)
-  A_1 = MergeSort_perm_helper(array[0:m])
-  A_2 = MergeSort_perm_helper(array[m:len(array)])
+  A_1 = MergeSort_perm(array[0:m])
+  A_2 = MergeSort_perm(array[m:len(array)])
   return Merge(A_1, A_2)
 def Merge(A_1, A_2):
   A = []
@@ -249,12 +167,10 @@ def get_d(j,a,l_alpha):
   increasing = []
   t_increase=[]
   max_d = l_alpha
-  #print("j=",j)
   d = [0 for i in range(len(a)-j)]
   decreasing.append(copy.copy(d))
   furth_index = 0
   while d != [max_d for i in range(len(d))]:
-  #for s in range(10):
     d[0]=d[0]+1
     for r in range(len(d)):
       if d[r]==max_d +1:
@@ -271,7 +187,6 @@ def get_d(j,a,l_alpha):
   furth_index=0
   t_increase.append(copy.copy([0 for i in range(len(d))]))
   while d != [max_d  for i in range(len(d))]:
-  #for s in range(10):
     d[0]=d[0]+1
     for r in range(len(d)):
       if d[r]==max_d +1:
@@ -286,8 +201,6 @@ def get_d(j,a,l_alpha):
     t_increase.append(copy.copy(d))
   for x in t_increase:
     increasing.append(copy.copy(x[::-1]))
-  #print (decreasing)
-  #print(increasing)
   all_piere = []
   for x in increasing:
     for y in decreasing:
@@ -306,60 +219,18 @@ def get_d(j,a,l_alpha):
       else:
         for w in range(0,max_d +1):
           all_piere.append([w])
-        #print(z)
   return all_piere
 
-def T(d,a,i,p,n):
-  temp_a = copy.deepcopy(a)
-  temp_a.append(n)
-  temp_a.insert(0,0)
-  if temp_a[i] - d[i-1] < p and p <= temp_a[i]:
-    p = p+ temp_a[i+1]-temp_a[i]
-  elif temp_a[i] < p and p <= temp_a[i+1]:
-    p= p-d[i-1]
-  else:
-    p=p
-  return p
-def gamma(d,a,n,p):
-  for i in range(len(a),0,-1):
-    p = T(d,a,i,p,n)
-  #print()
-  return p
-
-def w_a(a,n,j):
-  i=0
-  temp_a = copy.deepcopy(a)
-  temp_a.append(n)
-  temp_a.insert(0,0)
-  while temp_a[i]<j:
-    i=i+1
-  i = i-1
-
-  return temp_a[i]+temp_a[i+1]+1-j
-
-
 def fix_perm(a,perm_og):
-  #print()
-  #print("a = ",a," perm = ",perm_og)
-
+  '''sorts each division of the permutaion'''
   perm=copy.deepcopy(perm_og)
-  #print()
-  #print("  perm[:a[0]] = ",  perm[:a[0]])
   perm[:a[0]]=insertionSort(perm[:a[0]])
-  #print("  perm[:a[0]] = ",  perm[:a[0]])
   for r in range(0,len(a)-1):
-    #print()
-    #print(  "perm[",a,"[",r,"]:a[",r+1,"]] = ",perm[a[r]:a[r+1]])
     perm[a[r]:a[r+1]]=insertionSort(perm[a[r]:a[r+1]])
-    #print(  "perm[",a,"[",r,"]:a[",r+1,"]] = ",perm[a[r]:a[r+1]])
-  #print()
-  #print("perm[a[-1]:] = ",perm[a[-1]:])
   perm[a[-1]:]=insertionSort(perm[a[-1]:])
-  #print("perm[a[-1]:] = ",perm[a[-1]:])
-  #print("sorted perm = ",perm)
   return perm
+
 def insertionSort(arr):
-  #print(arr)
   for i in range(1, len(arr)):
       k = arr[i]
       j = i-1
@@ -369,6 +240,8 @@ def insertionSort(arr):
       arr[j+1] = k
   return arr
 def swap_perm(a,d,large):
+  '''swaps the largest element in the first division where d = 1 with the smallest element of the last divison where d = 1'''
+  '''used in Thm 1 function'''
   largest = copy.deepcopy(large)
   index_first_one = 0
   found1=0 #bool for if first one is found
@@ -381,35 +254,15 @@ def swap_perm(a,d,large):
     if d[len(d)-i-1]==1 and found2 == 0:
       index_last_one = len(d)-1-i
       found2=1
-  #print("index_first_one: ",index_first_one,"  index_last_one: ",index_last_one)
   small_swap = a[index_first_one]-1 #the index of the smaller value to swap
   #the index of the larger value to swap is the end - the amount of elms in the last section
   large_swap = a[index_last_one]
-  """
-  for i in range(len(a)-1,index_last_one,-1):
-    print(large_swap," -= ",a[i])
-    large_swap -= a[i-1] #add 1 (- -1)to get the number to the right of the partition not the left
-  """
-  #print(largest)
-  #print(largest[small_swap],"   ",largest[large_swap])
   temp = largest[small_swap]
   largest[small_swap]=largest[large_swap]
   largest[large_swap]=temp
-  #print("t largest = ",largest)
   largest = fix_perm(a,largest)
-  #print("t largest = ",largest)
   return largest
-"""
-print("Possible permutations:")
-Print(S(4,a))
-x = (make_matrix(alpha,[0],a,S(4,a)))
-y = (make_matrix(alpha,[1],a,S(4,a)))
-Print(add_mat(x,y))
-print(Thm1(alpha,[3,4,1,2],[1,3,2,4],d,a))
-#Print(make_matrix(alpha,d,a,S(4,a)))
-"""
 def inv(perm):
-  #print("perm = ",perm)
   inverse = [0] * len(perm)
   for i, p in enumerate(perm):
       inverse[p] = i

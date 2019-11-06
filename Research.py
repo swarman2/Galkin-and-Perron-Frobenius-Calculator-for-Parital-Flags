@@ -6,53 +6,13 @@ import multiprocessing #for threading
 import threading #also for threading
 """alph is an ordered pair [l,s] where s is the highest number in alpha, and l is the length of alpha"""
 def Thm1(alph,len_u,len_w,sum):
-  """
-  if not len(d) == len(a):
-    print("Invalid Input")
-    return -1
-  if not max(u)==max(w):
-    print("Invalid Input")
-    return -1
-  for i in range(len(a)-1):
-    if a[i]>=a[i+1]:
-      print("Invalid Input")
-      return -1
-  for i in range(len(a)):
-    if a[i]>=max(u):
-       print("Invalid Input")
-       return -1
-  for i in range(1,max(u)+1):
-    if not i in u or not i in w:
-       print("Invalid Input")
-       return -1
-  if not alph[1] in a or alph[1]<alph[0]:
-    print("Invalid Input")
-    return -1
-  n = max(u)
-  j = a.index(alph[1])+1
-  if not Piere(d,j):
-    return 0
-  sum_1 = 0
-  sum_2 = 0
-  k = len(a)
-  a.append(n)
-  for i in range(0,k):
-    sum_1 = sum_1 + a[i]*(a[i+1]-a[i])
-    if i == 0:
-      sum_2 = sum_2 + (a[i+1])*d[i]
-    else:
-      sum_2 = sum_2 + (a[i+1] - a[i-1])*d[i]
-  a.pop()
-  """
   if len_u + alph[0]==len_w + sum:
     return 1
   else:
     return 0
 
-
-def make_matrix(alph,d,a,array):
-  #find the sum used in the thm
-  #print("array = ",array)
+def get_sub_matrix(alph,d,a,array):
+  '''finds the matrix for one d value '''
   n=max(array[0])
   sum = 0
   k = len(a)
@@ -63,13 +23,10 @@ def make_matrix(alph,d,a,array):
     else:
       sum = sum + (a[i+1] - a[i-1])*d[i]
   a.pop()
-
   t_thm1=0
-
-  #print("Order of permutations:")
-  #print(array)
   mat = [ [ None for i in range(len(array)) ] for j in range(len(array)) ]
   n = max(array[0])
+  '''
   extendeda=copy.deepcopy(a)
   extendeda.append(n)
   sum_2=0
@@ -79,17 +36,13 @@ def make_matrix(alph,d,a,array):
       sum_2 = sum_2 + (extendeda[i+1])*d[i]
     else:
       sum_2 = sum_2 + (extendeda[i+1] - extendeda[i-1])*d[i]
+  '''
   l_tuple = array[-1]
   largest=[]
   for i in l_tuple:
     largest.append(i-1)
-
   swap_largest = swap_perm(a,d,largest)
-
   gammad=np.asarray(inv(largest))[swap_largest]
-  #t_thm1=0
-  #print("gamma_arr = ",gamma_arr)
-  #print("******************************* d = ",d, " *******************************")
   for i in range(len(array)):
     len_u=l(array[i])
     for j in range(len(array)):
@@ -97,31 +50,16 @@ def make_matrix(alph,d,a,array):
       start=time()
       mat[i][j] = Thm1(alph, len_u, len_w,sum)
       t_thm1+=time()-start
-      #print()
-      #print("[",i,"][",j,"]")
       if mat[i][j]==1:
-        #print("test")
         if d == [0] * len(d):
           if not len_w == len_u+1:
             mat[i][j]=0
           else:
             a_j = alph[1] # A_j is the last subscript of alpha which is alph[1]
-
             ident = np.arange(n)
             equal_exists = 0
             for b in range(alph[1]):
               for c in range(alph[1],n):
-                #ident = np.arange(n)
-                #temp = ident[b]
-                #ident[b]=ident[c]
-                #ident[c] = temp
-                #u = np.asarray(array[i])
-                #for z in range(len(u)):
-                #  u[z] = u[z]-1
-                #print("u = ",u)
-                #print("w = ",)
-                #rhs = ident[u]
-                #rhs = fix_perm(a,rhs)
                 rhs = np.asarray(array[i])
                 temp = rhs[b]
                 rhs[b] = rhs[c]
@@ -133,66 +71,36 @@ def make_matrix(alph,d,a,array):
                     equal = 0
                 if equal:
                   equal_exists=1
-
             if not equal_exists:
               mat[i][j]=0
-        else: # if d != [0 0 0 .. ]
-          #print("array = ",array)
-          #print("u = ",array[i],"  w = ",array[j])
-          #print("largest = ",largest)
-          #print("swap_largest = ",swap_largest)
-          #print("gammad = ",gammad)
-          #print("u * gammad = ",np.asarray(array[i])[gammad])
-          #print("")
+        else:
           w=[]
           for x in array[j]:
             w.append(x)
-          #print("not (",l(np.asarray(array[i])[gammad])," == ",l(array[i])+1-sum_2," and ",np.asarray(array[i])[gammad]," == ",w,")")
-          if not(l(np.asarray(array[i])[gammad]) == len_u+1-sum_2 and array_equals(np.asarray(array[i])[gammad],w)):
+          if not(l(np.asarray(array[i])[gammad]) == len_u+1-sum and array_equals(np.asarray(array[i])[gammad],w)):
             mat[i][j]=0
-
   return mat,t_thm1
 
-def largest_real_eig(alpha,a,n,perm):
+def get_matrix(alpha,a,n,perm):
   j = a.index(alpha[1])+1
-
   perm= MergeSort_perm(perm)
-  #print(perm)
   mat = [ [0 for i in range(len(perm)) ] for j in range(len(perm)) ]
-  #print(get_d(j,a,alpha[0]))
-  t1=time()
   t_thm1=0
   for d in get_d(j,a,alpha[0]):
-    temp,t_thm_temp = make_matrix(alpha,d,a,perm)
+    temp,t_thm_temp = get_sub_matrix(alpha,d,a,perm)
     t_thm1+=t_thm_temp
-    #Print(temp)
-    #print()
-    #print()
-    """"
-    new code
-    """
     mat = add_mat(mat,temp)
-  #Print(mat)
-  #print("    { INFO } matrix generation: ",round(time()-t1,3)," secs")
-  #print("        ( INFO ) Thm 1 calculations: ",round(t_thm1,3)," secs")
-  t2=time()
-  real_eigvals = []
-  for val in np.linalg.eigvals(mat):
-    real_eigvals.append(np.real(val))
-  #print("    { INFO } eigenvalue calculation: ",round(time()-t2,3)," secs")
-  maxReal = max(real_eigvals)
-  return maxReal,mat
-
-
+  return mat
+def largest_real_eig(mat):
+    real_eigvals = []
+    for val in np.linalg.eigvals(mat):
+      real_eigvals.append(np.real(val))
+    return max(real_eigvals)
 def main():
-
   max_n = 10
   max_a = 4
   min_a = 4
   min_n=max_a+1
-  #if max_a >= multiprocessing.cpu_count():
-    #print(" WOULD USE TOO MANY THREADS")
-
   Threads=[]
   x = []
   y=[]
@@ -236,7 +144,7 @@ def main_helper(max_n,min_n,a2,xarr,yarr):
     t=time()
     #print("[ INFO ] solving n = ",i," a = [1, ",a2,"]")
     xarr.append(i)
-    yarr.append(round(largest_real_eig(alpha,a,i,perm),5))
+    yarr.append(round(largest_real_eig(get_matrix(alpha,a,i,perm),5)))
     #print("n = ",i,":  ",round(time()-t,3)," secs")
   #xarr[0]=points[0]
   #yarr[0]=points[1]
@@ -255,7 +163,7 @@ def run():
     perm = S(n,a)
     print("permutations: ",perm)
     for i in a:
-      mat.append(largest_real_eig([1,i],a,n,perm)[1])
+      mat.append(get_matrix([1,i],a,n,perm))
     #Print(mat[0])
     #Print(mat[1])
     sum_1 = np.zeros((len(mat[0][0]),len(mat[0][1])))
@@ -279,15 +187,15 @@ def run():
   plt.show()
 def run2():
   a = [1,3]
-  n = 5
+  n = 8
   x_arr=[]
   y_arr=[]
   mat=[]
   perm = S(n,a)
   print("permutations: ",perm)
 
-  mat1 = largest_real_eig([1,a[0]],a,n,perm)[1]
-  mat2 = (largest_real_eig([1,a[1]],a,n,perm)[1])
+  mat1 = get_matrix([1,a[0]],a,n,perm)
+  mat2 = get_matrix([1,a[1]],a,n,perm)
   Print(mat1)
   Print(mat2)
   mat3 = (np.matmul(mat1,mat2))
@@ -316,4 +224,151 @@ def run2():
   print(eigen1 + eigen2)
   print(eigen1 * eigen2)
 
-run2()
+def get_valid_n(input_str):
+    valid_n = False
+    while not valid_n:
+      valid_n = True
+      n = input(input_str + ": ")
+      try:
+        n = int(n)
+        if n >16:
+          print("Enter n less than 16 ")
+          valid_n = False
+        if n < 3:
+          print("Enter n greater than 2 ")
+          valid_n = False
+      except:
+        print("Enter an intger for n")
+        valid_n = False
+    return n
+def get_valid_a(n, input_str):
+    valid_a = False
+    while not valid_a:
+      valid_a = True
+      str_a = input(input_str + ": ")
+      str_a.replace(" ","") #get rid of spaces
+      a = str_a.split(",")
+      for i,split in enumerate(a):
+        try:
+          split = int(split)
+          a[i] = split
+        except:
+          print("a must be all intergers try again")
+          valid_a = False
+          break
+        if split >15:
+          print("a values must be less than 15")
+          valid_a = False
+        if split >n:
+          print("a values must be less than n")
+          valid_a = False
+        if split <=0:
+          print("a values must be greater than 0")
+          valid_a = False
+
+      #test if a stritly increasing
+      if valid_a:
+        for i in range(1,len(a)):
+          if a[i]<= a[i-1]:
+            print("a must be stritly increasing try again")
+            valid_a = False
+            break
+    return a
+def printMenu():
+  valid_result = False
+  while not valid_result:
+    valid_result = True
+    print("----------- MENU -----------")
+    print("1. Calculate bound as n ranges")
+    print("2. P, P inverse thing")
+    print("3. Find largest real eignen values as n ranges")
+    print("4. Quit")
+    result = input()
+    if not result in ["1","2","3","4","Q","q"]:
+      print("Invalid result")
+      valid_result = False
+  if result in ["q","Q"]:
+    result  = "4"
+  return int(result)
+
+def get_valid_alpha(A):
+  valid_length = False
+  alpha_choices = []
+  while not valid_length:
+    valid_length = True
+    length = input("enter length: ")
+    try:
+      length = int(length)
+    except:
+      print("Enter an int for length")
+      valid_length = False
+    if length <= 0 or length > max(A):
+      print("Enter a length in range (",0,", ",max(A),"]")
+      valid_length = False
+  print()
+  valid_alpha = False
+  while not valid_alpha:
+    valid_alpha = True
+    print("Enter a choice for alpha: ")
+    counter = 0
+    for i,a in enumerate(A):
+      if a - length >=0:
+        counter = counter + 1
+        print(counter,".  [",end='')
+        for j in range(a - length+1,a ):
+          print("S_",j,", ",end='')
+        print("S_",a,"]")
+        alpha_choices.append([length,a])
+    alpha_choice = input()
+    try:
+      alpha_choice = int(alpha_choice)
+    except:
+      print("Enter an integer for alpha")
+      valid_alpha = False
+    if not alpha_choice in range(1,len(alpha_choices)+1):
+      print("Enter a number from the list")
+      valid_alpha = False
+  return alpha_choices[alpha_choice-1]
+def UI():
+  import matplotlib.animation as animation
+  while True:
+    result = printMenu()
+    if result == 4:
+      return
+    enter_more_values = True
+    while enter_more_values:
+      if result == 1:
+        min_n = get_valid_n("Enter min n")
+        max_n = get_valid_n("Enter max n")
+        a = get_valid_a(min_n, "Enter a (a_1, a_2, ...)")
+        alpha = get_valid_alpha(a)
+        print("you chose: ")
+        print(min_n," <= n <= ",max_n)
+        print("a = ",a)
+        print("alpha (length, last subscript) = ",alpha)
+        xarr = []
+        yarr = []
+        for n in range(min_n,max_n+1):
+          perm = S(n,a)
+          xarr.append(n)
+          yarr.append(round(largest_real_eig(get_matrix(alpha,a,n,perm)),5))
+          print("(",xarr[-1],", ",yarr[-1],")")
+        plt.plot(xarr,yarr)
+        plt.show()
+        enter_more_values = False
+      elif result == 2:
+        n = get_valid_n("Enter n")
+        a = get_valid_a(n,"Enter a")
+        perm = S(n,a)
+        for i in range(len(a)):
+          for j in range(i+1, len(a)):
+             print("alphas: S_",a[i]," and S_",a[j])
+             print(" A : matrix for S_",a[i])
+             print(" B : matrix for S_",a[j])
+             A = get_matrix([1,a[i]],a,n,perm)
+             B = get_matrix([1,a[j]],a,n,perm)
+             print("Largest real eigen values:")
+             print("A:    ",largest_real_eig(A),"    B: ",largest_real_eig(B))
+             print("A*B:  ",largest_real_eig(np.matmul(A,B)),"   A+B: ",largest_real_eig(add_mat(A,B)))
+             print()
+UI()
