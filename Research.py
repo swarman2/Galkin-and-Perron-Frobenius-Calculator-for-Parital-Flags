@@ -245,28 +245,75 @@ def main_helper(max_n,min_n,a2,xarr,yarr):
 
   #print(mat[7][4])
 def run():
-  a = [2]
+  a = [4]
   n= 4
+  x_arr=[]
+  y_arr=[]
+  for n in range(5,7):
+    print("n = ",n)
+    mat=[]
+    perm = S(n,a)
+    print("permutations: ",perm)
+    for i in a:
+      mat.append(largest_real_eig([1,i],a,n,perm)[1])
+    #Print(mat[0])
+    #Print(mat[1])
+    sum_1 = np.zeros((len(mat[0][0]),len(mat[0][1])))
+    sum_2 = 0
+    a_w_endpoints = copy.deepcopy(a)
+    a_w_endpoints = [0] + a_w_endpoints + [n]
+    for i in range(1,len(a)+1):
+      sum_1+=(a_w_endpoints[i+1]-a_w_endpoints[i-1])*np.asarray(mat[i-1])
+      sum_2+=a_w_endpoints[i]*(a_w_endpoints[i+1]-a_w_endpoints[i])
+    real_eigvals = []
+    print(sum_1)
+    for val in np.linalg.eigvals(sum_1):
+      real_eigvals.append(np.real(val))
+    E = max(real_eigvals)
+    x_arr.append(n)
+    y_arr.append(E-sum_2-1)
+    #eignen value for s2, n=4 should be 4 sqrt(2)
+    print("E: ",E,"  sum_2: ",sum_2)
+    print("E - sum_2 -1 = ",E - sum_2 -1)
+  plt.plot(x_arr,y_arr)
+  plt.show()
+def run2():
+  a = [1,3]
+  n = 5
+  x_arr=[]
+  y_arr=[]
   mat=[]
   perm = S(n,a)
   print("permutations: ",perm)
-  for i in a:
-    mat.append(largest_real_eig([1,i],a,n,perm)[1])
-  #Print(mat[0])
-  #Print(mat[1])
-  sum_1 = np.zeros((len(mat[0][0]),len(mat[0][1])))
-  sum_2 = 0
-  a_w_endpoints = copy.deepcopy(a)
-  a_w_endpoints = [0] + a_w_endpoints + [n]
-  for i in range(len(a)):
-    sum_1+=(a_w_endpoints[i+1]-a_w_endpoints[i-1])*np.asarray(mat[i])
-    sum_2+=a_w_endpoints[i]*(a_w_endpoints[i+1]-a_w_endpoints[i])
+
+  mat1 = largest_real_eig([1,a[0]],a,n,perm)[1]
+  mat2 = (largest_real_eig([1,a[1]],a,n,perm)[1])
+  Print(mat1)
+  Print(mat2)
+  mat3 = (np.matmul(mat1,mat2))
+  mat4 = add_mat(mat1,mat2)
   real_eigvals = []
-  for val in np.linalg.eigvals(sum_1):
+  for val in np.linalg.eigvals(mat1):
     real_eigvals.append(np.real(val))
-  E = max(real_eigvals)
-  #eignen value for s2, n=4 should be 4 sqrt(2)
-  print("E: ",E,"  sum_2: ",sum_2)
-  print("E - sum_2 -1 = ",E - sum_2 -1)
-  print(4*math.sqrt(2)-5)
-run()
+
+  eigen1 = max(real_eigvals)
+  real_eigvals = []
+  for val in np.linalg.eigvals(mat2):
+    real_eigvals.append(np.real(val))
+
+  eigen2 = max(real_eigvals)
+  real_eigvals = []
+  for val in np.linalg.eigvals(mat3):
+    real_eigvals.append(np.real(val))
+
+  eigen3 = max(real_eigvals)
+  real_eigvals = []
+  for val in np.linalg.eigvals(mat4):
+    real_eigvals.append(np.real(val))
+  eigen4 = max(real_eigvals)
+
+  print(eigen1, "  ",eigen2,"  ",eigen3,"  ",eigen4)
+  print(eigen1 + eigen2)
+  print(eigen1 * eigen2)
+
+run2()

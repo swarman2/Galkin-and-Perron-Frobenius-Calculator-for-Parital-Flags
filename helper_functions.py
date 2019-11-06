@@ -13,9 +13,65 @@ a = [2]
 """
 
 """
+
+def valid_perm(perm,a_temp):
+  a = copy.deepcopy(a_temp)
+  a = [0]+a+[max(perm)]
+  array_of_perm = []
+  for i in range(1,len(a_temp)+2):
+    array_of_perm.append(perm[a[i-1]:a[i]])
+  for perm in array_of_perm:
+    for i in range(1,len(perm)):
+      if perm[i]<perm[i-1]:
+        return False
+  return True
+
 len_dict={}
 #thread_count = multiprocessing.cpu_count()
 def S(maxNum,split_temp = []):
+  permutations = []
+  f = open("D:\\ResearchFall19\\n13.bin","rb");
+  #x = f.readline()
+  #x = x.split(" ")
+  if maxNum < 13:
+    x = list(f.read(13))
+    while x[maxNum] == maxNum+1:
+      perm=x[:maxNum]
+      if valid_perm(perm, split_temp):
+        permutations.append(perm)
+      x = list(f.read(13))
+    #print(permutations)
+    return permutations
+  if maxNum == 13:
+    counter = 0
+    perm = list(f.read(13))
+    while perm:
+      counter += 1
+      if counter%10000 == 0:
+        print(counter)
+      if valid_perm(perm, split_temp):
+        permutations.append(perm)
+      perm = list(f.read(13))
+    print(permutations)
+    return
+  if maxNum >13:
+
+    perm=list(f.read(13))
+    while perm:
+      new_perm = []
+      for i in range(14,maxNum+1):
+        new_perm.append([perm[j:] + [i] + mylist[:j] for j in xrange(len(perm),-1,-1)])
+        permutations = new_perm
+        new_perm=[]
+      for perm in permutations:
+          if valid_perm(perm, split_temp):
+            permutations.append(perm)
+      perm = list(f.read(13))
+    return
+
+  for i in range(len(perm)):
+    perm[i]=int(perm[i])
+  print(perm)
   t=time()
   split = copy.deepcopy(split_temp)
   split.append(maxNum)
@@ -54,14 +110,16 @@ def S(maxNum,split_temp = []):
   for k in range(split[-2]+1,maxNum):
     #print("test")
     #print("l = ",l)
-    reverse_ident = []
-    for i in range(k,0,-1):
-      reverse_ident.append(i)
-    l.append(reverse_ident)
-    new_l=[]
-    for i in range(len(split)):
+    #reverse_ident = []
+    #for i in range(k,0,-1):
+    #  reverse_ident.append(i)
+    #l.append(reverse_ident)
+    #new_l=[]
+    #for i in range(len(split)):
+    for i in range(len(l)):
       for j in range(len(l)):
-        l[j].insert(split[i]-1,k+1)
+        #l[j].insert(split[i]-1,k+1)
+        l[j].insert(i,k+1)
         copyl=copy.deepcopy(l[j])
         new_perm = fix_perm(split[0:-1],copyl)
         if not new_perm in new_l:
