@@ -149,8 +149,6 @@ def main_helper(max_n,min_n,a2,xarr,yarr):
   #xarr[0]=points[0]
   #yarr[0]=points[1]
 
-
-
   #print(mat[7][4])
 def run():
   a = [4]
@@ -279,9 +277,9 @@ def printMenu():
   while not valid_result:
     valid_result = True
     print("----------- MENU -----------")
-    print("1. Calculate bound as n ranges")
-    print("2. P, P inverse thing")
-    print("3. Find largest real eignen values as n ranges")
+    print("1. Find largest real eignen values as n ranges")
+    print("2. F-P dim check")
+    print("3. Calculate max eigen-values -dim +1 as n ranges")
     print("4. Quit")
     result = input()
     if not result in ["1","2","3","4","Q","q"]:
