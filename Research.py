@@ -294,7 +294,7 @@ def get_valid_alpha(A):
   alpha_choices = []
   while not valid_length:
     valid_length = True
-    length = input("enter length: ")
+    length = input("Enter the length of alpha: ")
     try:
       length = int(length)
     except:
@@ -333,40 +333,71 @@ def UI():
     result = printMenu()
     if result == 4:
       return
-    enter_more_values = True
-    while enter_more_values:
-      if result == 1:
-        min_n = get_valid_n("Enter min n")
-        max_n = get_valid_n("Enter max n")
-        a = get_valid_a(min_n, "Enter a (a_1, a_2, ...)")
-        alpha = get_valid_alpha(a)
-        print("you chose: ")
-        print(min_n," <= n <= ",max_n)
-        print("a = ",a)
-        print("alpha (length, last subscript) = ",alpha)
-        xarr = []
-        yarr = []
-        for n in range(min_n,max_n+1):
-          perm = S(n,a)
-          xarr.append(n)
-          yarr.append(round(largest_real_eig(get_matrix(alpha,a,n,perm)),5))
-          print("(",xarr[-1],", ",yarr[-1],")")
-        plt.plot(xarr,yarr)
-        plt.show()
-        enter_more_values = False
-      elif result == 2:
-        n = get_valid_n("Enter n")
-        a = get_valid_a(n,"Enter a")
+    if result == 1:
+      min_n = get_valid_n("Enter min n")
+      max_n = get_valid_n("Enter max n")
+      a = get_valid_a(min_n, "Enter a (a_1, a_2, ...)")
+      alpha = get_valid_alpha(a)
+      print("you chose: ")
+      print(min_n," <= n <= ",max_n)
+      print("a = ",a)
+      print("alpha (length, last subscript) = ",alpha)
+      xarr = []
+      yarr = []
+      for n in range(min_n,max_n+1):
         perm = S(n,a)
-        for i in range(len(a)):
-          for j in range(i+1, len(a)):
-             print("alphas: S_",a[i]," and S_",a[j])
-             print(" A : matrix for S_",a[i])
-             print(" B : matrix for S_",a[j])
-             A = get_matrix([1,a[i]],a,n,perm)
-             B = get_matrix([1,a[j]],a,n,perm)
-             print("Largest real eigen values:")
-             print("A:    ",largest_real_eig(A),"    B: ",largest_real_eig(B))
-             print("A*B:  ",largest_real_eig(np.matmul(A,B)),"   A+B: ",largest_real_eig(add_mat(A,B)))
-             print()
+        xarr.append(n)
+        yarr.append(round(largest_real_eig(get_matrix(alpha,a,n,perm)),5))
+        print("(",xarr[-1],", ",yarr[-1],")")
+      plt.plot(xarr,yarr)
+      plt.show()
+    elif result == 2:
+      n = get_valid_n("Enter n")
+      a = get_valid_a(n,"Enter a")
+      perm = S(n,a)
+      for i in range(len(a)):
+        for j in range(i+1, len(a)):
+           print("alphas: S_",a[i]," and S_",a[j])
+           print(" A : matrix for S_",a[i])
+           print(" B : matrix for S_",a[j])
+           A = get_matrix([1,a[i]],a,n,perm)
+           B = get_matrix([1,a[j]],a,n,perm)
+           print("Largest real eigen values:")
+           print("A:    ",largest_real_eig(A),"    B: ",largest_real_eig(B))
+           print("A*B:  ",largest_real_eig(np.matmul(A,B)),"   A+B: ",largest_real_eig(add_mat(A,B)))
+           print()
+    elif result == 3:
+      min_n = get_valid_n("Enter min n")
+      max_n = get_valid_n("Enter max n")
+      a = get_valid_a(min_n,"Enter a")
+      x_arr=[]
+      y_arr=[]
+      for n in range(min_n,max_n):
+
+        print("n = ",n)
+        mat=[]
+        perm = S(n,a)
+        #print("permutations: ",perm)
+        for i in a:
+          mat.append(get_matrix([1,i],a,n,perm))
+        #Print(mat[0])
+        #Print(mat[1])
+        sum_1 = np.zeros((len(mat[0][0]),len(mat[0][1])))
+        sum_2 = 0
+        a_w_endpoints = copy.deepcopy(a)
+        a_w_endpoints = [0] + a_w_endpoints + [n]
+        for i in range(1,len(a)+1):
+          sum_1+=(a_w_endpoints[i+1]-a_w_endpoints[i-1])*np.asarray(mat[i-1])
+          sum_2+=a_w_endpoints[i]*(a_w_endpoints[i+1]-a_w_endpoints[i])
+        real_eigvals = []
+        for val in np.linalg.eigvals(sum_1):
+          real_eigvals.append(np.real(val))
+        E = max(real_eigvals)
+        x_arr.append(n)
+        y_arr.append(E-sum_2-1)
+        #eignen value for s2, n=4 should be 4 sqrt(2)
+        print("E: ",E,"  sum_2: ",sum_2)
+        print("E - sum_2 -1 = ",E - sum_2 -1)
+      plt.plot(x_arr,y_arr)
+      plt.show()
 UI()
