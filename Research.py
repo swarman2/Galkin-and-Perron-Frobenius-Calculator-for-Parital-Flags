@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 from time import time
 import multiprocessing #for threading
 import threading #also for threading
+import sys
+
 """alph is an ordered pair [l,s] where s is the highest number in alpha, and l is the length of alpha"""
 def Thm1(alph,len_u,len_w,sum):
   if len_u + alph[0]==len_w + sum:
@@ -312,9 +314,15 @@ def get_valid_alpha(A):
     for i,a in enumerate(A):
       if a - length >=0:
         counter = counter + 1
-        print(counter,".  [",end='')
+        if sys.version_info[0] < 3:
+          print(counter,".  ["),
+        else:
+          print(counter,".  [", end='')
         for j in range(a - length+1,a ):
-          print("S_",j,", ",end='')
+          if sys.version_info[0] < 3:
+            print("S_",j,", "),
+          else:
+            print("S_",j,", ",end='')
         print("S_",a,"]")
         alpha_choices.append([length,a])
     alpha_choice = input()
