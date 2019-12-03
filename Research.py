@@ -314,15 +314,10 @@ def get_valid_alpha(A):
     for i,a in enumerate(A):
       if a - length >=0:
         counter = counter + 1
-        if sys.version_info[0] < 3:
-          print(counter,".  ["),
-        else:
-          print(counter,".  [", end='')
+        print(counter,".  ["),
         for j in range(a - length+1,a ):
-          if sys.version_info[0] < 3:
-            print("S_",j,", "),
-          else:
-            print("S_",j,", ",end='')
+          print("S_",j,", "),
+
         print("S_",a,"]")
         alpha_choices.append([length,a])
     alpha_choice = input()
