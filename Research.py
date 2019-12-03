@@ -279,7 +279,7 @@ def printMenu():
     print("----------- MENU -----------")
     print("1. Find largest real eignen values as n ranges")
     print("2. F-P dim check")
-    print("3. Calculate max eigen-values -dim +1 as n ranges")
+    print("3. Calculate max eigenvalues - dim - 1 as n ranges")
     print("4. Quit")
     result = input()
     if not result in ["1","2","3","4","Q","q"]:
