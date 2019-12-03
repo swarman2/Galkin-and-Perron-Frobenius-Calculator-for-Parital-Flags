@@ -151,17 +151,17 @@ def add_mat(A,B):
         mat[i][j]=A[i][j]+B[i][j]
     return mat
 
-'''To print a matrix'''
-def Print(matrix):
-  print("    ",end = ' ')
-  for j in range(len(matrix[0])):
-    print("%2d"%j,end = '  ')
-  print()
-  for i in range(len(matrix)):
-    print("%2d"%i,": ",end=' ')
-    for j in range(len(matrix[0])):
-      print(matrix[i][j],end = '   ')
-    print()
+#'''To print a matrix'''
+#def Print(matrix):
+#  print("    ",end = ' ')
+#  for j in range(len(matrix[0])):
+#    print("%2d"%j,end = '  ')
+#  print()
+#  for i in range(len(matrix)):
+#    print("%2d"%i,": ",end=' ')
+#    for j in range(len(matrix[0])):
+#      print(matrix[i][j],end = '   ')
+#    print()
 def get_d(j,a,l_alpha):
   decreasing = []
   increasing = []
