@@ -314,9 +314,9 @@ def get_valid_alpha(A):
     for i,a in enumerate(A):
       if a - length >=0:
         counter = counter + 1
-        print(counter,".  ["),
+        print(counter,".  [", end = '')
         for j in range(a - length+1,a ):
-          print("S_",j,", "),
+          print("S_",j,", ", end = '')
 
         print("S_",a,"]")
         alpha_choices.append([length,a])
